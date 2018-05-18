@@ -14,12 +14,31 @@ class Traveller
     travel_info = open("https://api.octranspo1.com/v1.2/#{http_methods}?appID=#{APP_ID}&apiKey=#{APP_KEY}&routeNo=#{route_number}&stopNo=#{stop_number}").read
   end
 
-  def get_next_bus(route_number, stop_number)
+  def get_next_bus_arrival_time(route_number, stop_number)
     http_methods = "GetNextTripsForStop"
     next_bus_key = "AdjustedScheduleTime";
 
     response = make_api_call(http_methods, route_number, stop_number)
-    response.string_between_markers("<#{next_bus_key}>", "</#{next_bus_key}>")
+    value = response.string_between_markers("<#{next_bus_key}>", "</#{next_bus_key}>")
+    value = value.to_i
+
+    arrival_to_sentence(route_number, value)
+  end
+
+  def arrival_to_sentence(route_number, value)
+    if value > 0
+      "🚍 #{route_number} arriving in #{value} #{pluralize(value, 'minute')}"
+    else
+      "😕 No busses are running"
+    end
+  end
+
+  def pluralize(value, string)
+    if value > 1
+      string + 's'
+    else
+      string
+    end
   end
 end
 
@@ -31,6 +50,6 @@ end
 
 traveller = Traveller.new
 
-output = traveller.get_next_bus(HARD_CODED_ROUTE_NUMBER, HARD_CODED_STOP_NUMBER)
+output = traveller.get_next_bus_arrival_time(HARD_CODED_ROUTE_NUMBER, HARD_CODED_STOP_NUMBER)
 
 puts output
