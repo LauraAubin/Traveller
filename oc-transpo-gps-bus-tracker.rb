@@ -1,13 +1,9 @@
 #!/usr/bin/ruby
+require './Config'
+require './String'
 
 # For making http calls
 require 'open-uri'
-
-APP_ID = ""
-APP_KEY = ""
-
-HARD_CODED_ROUTE_NUMBER = "61"
-HARD_CODED_STOP_NUMBER = "3008"
 
 class Traveller
   def make_api_call(http_methods, route_number, stop_number)
@@ -27,24 +23,10 @@ class Traveller
 
   def arrival_to_sentence(route_number, value)
     if value > 0
-      "🚍 #{route_number} arriving in #{value} #{pluralize(value, 'minute')}"
+      "🚍 #{route_number} arriving in #{value} #{STRING::pluralize(value, 'minute')}"
     else
       "😕 No busses are running"
     end
-  end
-
-  def pluralize(value, string)
-    if value > 1
-      string + 's'
-    else
-      string
-    end
-  end
-end
-
-class String
-  def string_between_markers(front, back)
-    self[/#{Regexp.escape(front)}(.*?)#{Regexp.escape(back)}/m, 1]
   end
 end
 
