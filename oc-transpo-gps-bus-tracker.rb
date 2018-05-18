@@ -1,10 +1,3 @@
-#!/usr/bin/ruby
-require './Config'
-require './String'
-
-# For making http calls
-require 'open-uri'
-
 class Traveller
   def make_api_call(http_methods, route_number, stop_number)
     travel_info = open("https://api.octranspo1.com/v1.2/#{http_methods}?appID=#{APP_ID}&apiKey=#{APP_KEY}&routeNo=#{route_number}&stopNo=#{stop_number}").read
@@ -29,9 +22,3 @@ class Traveller
     end
   end
 end
-
-traveller = Traveller.new
-
-output = traveller.get_next_bus_arrival_time(HARD_CODED_ROUTE_NUMBER, HARD_CODED_STOP_NUMBER)
-
-puts output
