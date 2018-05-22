@@ -4,11 +4,8 @@ class Traveller
   end
 
   def get_next_bus_arrival_time(route_number, stop_number)
-    http_methods = "GetNextTripsForStop"
-    next_bus_key = "AdjustedScheduleTime";
-
-    response = make_api_call(http_methods, route_number, stop_number)
-    value = response.string_between_markers("<#{next_bus_key}>", "</#{next_bus_key}>")
+    response = make_api_call(NEXT_TRIPS_FOR_STOP, route_number, stop_number)
+    value = response.string_between_markers("<#{TIME_TO_ARRIVAL}>", "</#{TIME_TO_ARRIVAL}>")
     value = value.to_i
 
     arrival_to_sentence(route_number, value)
