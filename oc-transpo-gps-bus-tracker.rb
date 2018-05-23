@@ -5,17 +5,32 @@ class Traveller
 
   def get_next_bus_arrival_time(route_number, stop_number)
     response = make_api_call(NEXT_TRIPS_FOR_STOP, route_number, stop_number)
-    value = response.string_between_markers("<#{TIME_TO_ARRIVAL}>", "</#{TIME_TO_ARRIVAL}>")
-    value = value.to_i
+    time_to_arrival = response.string_between_markers("<#{TIME_TO_ARRIVAL}>", "</#{TIME_TO_ARRIVAL}>").to_i
+    is_real_time = is_real_time(response)
 
-    arrival_to_sentence(route_number, value)
+    arrival_to_sentence(route_number, time_to_arrival, is_real_time)
   end
 
-  def arrival_to_sentence(route_number, value)
-    if value > 0
-      "🚍 #{route_number} arriving in #{value} #{STRING::pluralize(value, 'minute')}"
+  def busses_are_expected(time_to_arrival)
+    time_to_arrival > 0
+  end
+
+  def is_real_time(response)
+    adjustment_value = response.string_between_markers("<#{ADJUSTMENT_AGE}>", "</#{ADJUSTMENT_AGE}>").to_i
+
+    return true if adjustment_value != -1
+    return false if adjustment_value == -1
+  end
+
+  def arrival_to_sentence(route_number, time_to_arrival, is_real_time)
+    if !busses_are_expected(time_to_arrival)
+      return "😕 No busses are running"
+    end
+
+    if is_real_time
+      "🚍 #{route_number} arriving in #{time_to_arrival} #{STRING::pluralize(time_to_arrival, 'minute')}"
     else
-      "😕 No busses are running"
+      "🗓 #{route_number} scheduled in #{time_to_arrival} #{STRING::pluralize(time_to_arrival, 'minute')}"
     end
   end
 end
