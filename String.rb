@@ -1,5 +1,8 @@
 class String
-  def string_between_markers(front, back)
+  def string_between_markers(marker)
+    front = "<#{marker}>"
+    back = "</#{marker}>"
+
     self[/#{Regexp.escape(front)}(.*?)#{Regexp.escape(back)}/m, 1]
   end
 
