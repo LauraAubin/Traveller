@@ -7,8 +7,8 @@ require_relative 'oc-transpo-api'
 require_relative 'oc-transpo-gps-bus-tracker.rb'
 
 # API config
-APP_ID = ""
-APP_KEY = ""
+APP_ID = "f45f8077"
+APP_KEY = "f3d78fbf26c0991d5a3dbaad6057b637"
 
 STRING = String.new
 OC_TRANSPO_API = OC_Transpo_API.new
