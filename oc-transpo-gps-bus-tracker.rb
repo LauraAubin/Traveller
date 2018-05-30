@@ -5,10 +5,35 @@ class Traveller
 
   def get_next_bus_arrival_time(route_number, stop_number)
     response = make_api_call(NEXT_TRIPS_FOR_STOP, route_number, stop_number)
-    time_to_arrival = response.string_between_markers("<#{TIME_TO_ARRIVAL}>", "</#{TIME_TO_ARRIVAL}>").to_i
-    is_real_time = is_real_time(response)
+    array_of_split_response = split_api_response(response, TIME_TO_ARRIVAL)
+
+    arrival_time_and_status = traverse_array_for_real_time(array_of_split_response.drop(1))
+    is_real_time = arrival_time_and_status[0]
+    time_to_arrival = arrival_time_and_status[1]
 
     arrival_to_sentence(route_number, time_to_arrival, is_real_time)
+  end
+
+  def split_api_response(response, key)
+    if key == TIME_TO_ARRIVAL
+      response.split("<Trip>")
+    end
+  end
+
+  def traverse_array_for_real_time(array)
+    return 0 if array.count == 0
+
+    output = [];
+
+    array.each do |response_index|
+      if is_real_time(response_index)
+        output << true << response_index.string_between_markers(TIME_TO_ARRIVAL).to_i
+        return output
+      end
+    end
+
+    output << false << array[0].string_between_markers(TIME_TO_ARRIVAL).to_i
+    return output
   end
 
   def busses_are_expected(time_to_arrival)
@@ -16,10 +41,10 @@ class Traveller
   end
 
   def is_real_time(response)
-    adjustment_value = response.string_between_markers("<#{ADJUSTMENT_AGE}>", "</#{ADJUSTMENT_AGE}>").to_i
+    adjustment_value = response.string_between_markers(ADJUSTMENT_AGE).to_f
 
-    return true if adjustment_value != -1
-    return false if adjustment_value == -1
+    return true if adjustment_value > 0
+    return false if adjustment_value < 0
   end
 
   def arrival_to_sentence(route_number, time_to_arrival, is_real_time)
