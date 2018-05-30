@@ -3,6 +3,7 @@ require 'open-uri'
 
 # Required files
 require_relative 'String'
+require_relative 'oc-transpo-api'
 require_relative 'oc-transpo-gps-bus-tracker.rb'
 
 # API config
@@ -10,6 +11,7 @@ APP_ID = ""
 APP_KEY = ""
 
 STRING = String.new
+OC_TRANSPO_API = OC_Transpo_API.new
 TRAVELLER = Traveller.new
 
 # API getters

@@ -1,23 +1,13 @@
 class Traveller
-  def make_api_call(http_methods, route_number, stop_number)
-    travel_info = open("https://api.octranspo1.com/v1.2/#{http_methods}?appID=#{APP_ID}&apiKey=#{APP_KEY}&routeNo=#{route_number}&stopNo=#{stop_number}").read
-  end
-
   def get_next_bus_arrival_time(route_number, stop_number)
-    response = make_api_call(NEXT_TRIPS_FOR_STOP, route_number, stop_number)
-    array_of_split_response = split_api_response(response, TIME_TO_ARRIVAL)
+    response = OC_TRANSPO_API::make_api_call(NEXT_TRIPS_FOR_STOP, route_number, stop_number)
+    array_of_split_response = OC_TRANSPO_API::split_api_response(response, TIME_TO_ARRIVAL)
 
     arrival_time_and_status = traverse_array_for_real_time(array_of_split_response.drop(1))
     is_real_time = arrival_time_and_status[0]
     time_to_arrival = arrival_time_and_status[1]
 
     arrival_to_sentence(route_number, time_to_arrival, is_real_time)
-  end
-
-  def split_api_response(response, key)
-    if key == TIME_TO_ARRIVAL
-      response.split("<Trip>")
-    end
   end
 
   def traverse_array_for_real_time(array)
