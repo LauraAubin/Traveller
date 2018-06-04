@@ -10,7 +10,7 @@ class ParseTimetable
   end
 
   def get_next_bus_arrival_time
-    return 0 if @my_timetable.public_send(@today).nil? # best place to put this? put in the initializer?
+    return "😴 No routes today" if @my_timetable.public_send(@today).nil? # best place to put this? put in the initializer?
 
     destinations_today = MY_TIMETABLE.public_send(@today)
 
