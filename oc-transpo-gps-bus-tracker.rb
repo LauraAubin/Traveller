@@ -1,7 +1,7 @@
 class Traveller
   def get_next_bus_arrival_time(route_number, stop_number)
-    response = OC_TRANSPO_API::make_api_call(NEXT_TRIPS_FOR_STOP, route_number, stop_number)
-    array_of_split_response = OC_TRANSPO_API::split_api_response(response, TIME_TO_ARRIVAL)
+    response = OC_TRANSPO_API.make_api_call(NEXT_TRIPS_FOR_STOP, route_number, stop_number)
+    array_of_split_response = OC_TRANSPO_API.split_api_response(response, TIME_TO_ARRIVAL)
 
     arrival_time_and_status = traverse_array_for_real_time(array_of_split_response.drop(1))
     is_real_time = arrival_time_and_status[0]
@@ -43,9 +43,9 @@ class Traveller
     end
 
     if is_real_time
-      "🚍 #{route_number} arriving in #{time_to_arrival} #{STRING::pluralize(time_to_arrival, 'minute')}"
+      "🚍 #{route_number} arriving in #{time_to_arrival} #{STRING.pluralize(time_to_arrival, 'minute')}"
     else
-      "🗓 #{route_number} scheduled in #{time_to_arrival} #{STRING::pluralize(time_to_arrival, 'minute')}"
+      "🗓 #{route_number} scheduled in #{time_to_arrival} #{STRING.pluralize(time_to_arrival, 'minute')}"
     end
   end
 end

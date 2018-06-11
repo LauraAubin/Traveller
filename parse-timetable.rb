@@ -1,7 +1,5 @@
 class ParseTimetable
   def initialize
-    @my_timetable = MyTimetable.new
-
     @today = Date.today.strftime('%A').downcase
     @now = Time.now.strftime('%k.%M').to_f
 
@@ -10,9 +8,9 @@ class ParseTimetable
   end
 
   def get_next_bus_arrival_time
-    return "😴 No routes today" if @my_timetable.public_send(@today).nil? # best place to put this? put in the initializer?
+    return "😴 No routes today" if MyTimetable.public_send(@today).nil?
 
-    destinations_today = MY_TIMETABLE.public_send(@today)
+    destinations_today = MyTimetable.public_send(@today)
 
     current_location_index = current_location_index(destinations_today)
     next_destination = get_next_destination(current_location_index, destinations_today)
@@ -50,9 +48,13 @@ class ParseTimetable
 
     trips = [];
     busses.each_slice(number_of_provided_bus_info) do |route_number, stop_number|
-      trips << TRAVELLER::get_next_bus_arrival_time(route_number, stop_number)
+      trips << TRAVELLER.get_next_bus_arrival_time(route_number, stop_number)
     end
 
     return trips
+  end
+
+  def self.run
+    new.get_next_bus_arrival_time
   end
 end

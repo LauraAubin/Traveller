@@ -14,7 +14,6 @@ APP_KEY = "f3d78fbf26c0991d5a3dbaad6057b637"
 
 STRING = String.new
 PARSE_TIMETABLE = ParseTimetable.new
-MY_TIMETABLE = MyTimetable.new
 OC_TRANSPO_API = OC_Transpo_API.new
 TRAVELLER = Traveller.new
 

@@ -1,6 +1,7 @@
-class MyTimetable
-  attr_reader :monday, :tuesday, :wednesday, :thursday, :friday, :saturday, :sunday
+module MyTimetable
+  extend self
 
-  def initialize
+  def method_missing(*args)
+    nil
   end
 end
