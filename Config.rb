@@ -7,6 +7,7 @@ require_relative 'parse-timetable'
 require_relative 'My Timetable/my-timetable'
 require_relative 'oc-transpo-api'
 require_relative 'oc-transpo-gps-bus-tracker'
+require_relative 'next_travel_location'
 
 # API config
 APP_ID = "f45f8077"

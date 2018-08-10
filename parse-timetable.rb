@@ -10,12 +10,7 @@ class ParseTimetable
   def get_next_bus_arrival_time
     return "😴 No routes today" if MyTimetable.public_send(@today).nil?
 
-    destinations_today = MyTimetable.public_send(@today)
-
-    current_location_index = current_location_index(destinations_today)
-    next_destination = get_next_destination(current_location_index, destinations_today)
-
-    get_bus_arrivals(next_destination)
+    get_bus_arrivals(surface_next_destination)
   end
 
   def current_location_index(destinations_today)
@@ -52,6 +47,15 @@ class ParseTimetable
     end
 
     return trips
+  end
+
+  def surface_next_destination
+    destinations_today = MyTimetable.public_send(@today)
+
+    current_location_index = current_location_index(destinations_today)
+    next_destination = get_next_destination(current_location_index, destinations_today)
+
+    return next_destination
   end
 
   def self.run
