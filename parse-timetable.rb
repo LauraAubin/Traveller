@@ -50,12 +50,14 @@ class ParseTimetable
   end
 
   def surface_next_destination
+    return nil if MyTimetable.public_send(@today).nil?
+
     destinations_today = MyTimetable.public_send(@today)
 
     current_location_index = current_location_index(destinations_today)
     next_destination = get_next_destination(current_location_index, destinations_today)
 
-    return next_destination
+    next_destination
   end
 
   def self.run
